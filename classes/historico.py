@@ -1,9 +1,11 @@
+#classe historico
+
 class Historico:
     def __init__(self):
         self.treinosRealizados = []
 
     def registrarTreino(self, treino):
-        """Registra um treino no histórico."""
+        """Regista um treino no histórico."""
         if treino.finalizado:
             self.treinosRealizados.append(treino)
             print(f"Treino '{treino.nome}' registrado no histórico.")

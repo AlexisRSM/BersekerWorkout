@@ -1,3 +1,4 @@
+#Aléxis Ralfe da Silva Mendes 25/11/24
 from classes.utilizador import Utilizador
 from classes.treino import Treino
 from classes.exercicio import Exercicio
@@ -5,7 +6,7 @@ from classes.planoTreino import PlanoTreino
 from classes.historico import Historico
 from datetime import datetime
 
-# Lista de exercícios predefinidos
+#lista de exercicios predefinidos
 EXERCICIOS_PREDEFINIDOS = [
     {"nome": "Agachamento", "series": 3, "repeticoes": 12, "carga": 20},
     {"nome": "Supino", "series": 3, "repeticoes": 10, "carga": 30},
@@ -19,9 +20,9 @@ EXERCICIOS_PREDEFINIDOS = [
     {"nome": "Prancha", "series": 3, "repeticoes": 1, "carga": 0},
 ]
 
-# Função para validar datas
+#função para validar datas
 def validarData(data):
-    """Valida se a data é válida e no formato AAAA-MM-DD."""
+    """valida se a data é válida e no formato AAAA-MM-DD."""
     try:
         datetime.strptime(data, "%Y-%m-%d")
         return True
@@ -31,7 +32,7 @@ def validarData(data):
 if __name__ == "__main__":
     print("Bem-vindo à Berserker Workout!")
 
-    # Recolher dados do utilizador
+    #recolher dados do utilizador
     nome = input("Insira o seu nome: ")
     idade = int(input("Insira a sua idade: "))
     peso = float(input("Insira o seu peso (kg, ex.: 70.5): ").replace(",", "."))
@@ -39,23 +40,17 @@ if __name__ == "__main__":
     objetivo = input("Qual é o seu objetivo? (ex.: Perder peso, Ganhar massa): ")
 
     utilizador = Utilizador(nome=nome, idade=idade, peso=peso, altura=altura, objetivo=objetivo)
-    plano = PlanoTreino(nomePlano="Plano Inicial", periodo="1 mês")
-    historico = Historico()
 
     treinoAtual = None
+    plano_selecionado = None
 
     while True:
         print("\nEscolha uma opção:")
         print("1. Calcular IMC")
         print("2. Mostrar/Editar Dados do Utilizador")
-        print("3. Criar Treino")
-        if plano.treinosProgramados:
-            print("4. Iniciar Treino")
-        if treinoAtual:
-            print("5. Finalizar Treino Atual")
-        print("6. Visualizar Histórico de Treinos")
-        print("7. Visualizar/Editar Planos de Treino")
-        print("8. Sair")
+        print("3. Gerir Planos de Treino")
+        print("4. Visualizar Histórico de Treinos")
+        print("5. Sair")
 
         opcao = input("Insira a sua opção: ")
 
@@ -83,7 +78,7 @@ if __name__ == "__main__":
                     altura = input("Nova altura (ou Enter para manter): ") or utilizador.altura
                     objetivo = input("Novo objetivo (ou Enter para manter): ") or utilizador.objetivo
 
-                    utilizador.atualizarPerfil(nome, idade, float(peso), float(altura), objetivo)
+                    utilizador.atualizarPerfil(nome, int(idade), float(peso), float(altura), objetivo)
                     print("Dados atualizados com sucesso!")
                 elif escolha == "2":
                     break
@@ -91,168 +86,258 @@ if __name__ == "__main__":
                     print("Opção inválida.")
 
         elif opcao == "3":
-            nomeTreino = input("Nome do treino: ")
-            print("\nEscolha a dificuldade:")
-            print("1. Fácil")
-            print("2. Intermédio")
-            print("3. Difícil")
-
-            nivelDificuldade = input("Insira a dificuldade (1, 2 ou 3): ")
-            while nivelDificuldade not in ["1", "2", "3"]:
-                print("Opção inválida. Escolha 1, 2 ou 3.")
-                nivelDificuldade = input("Insira a dificuldade (1, 2 ou 3): ")
-
-            dificuldadeTexto = {"1": "Fácil", "2": "Intermédio", "3": "Difícil"}[nivelDificuldade]
-
-            treino = Treino(data=None, nivelDificuldade=dificuldadeTexto, nome=nomeTreino)
-
-            # Perguntar se deseja adicionar exercícios
             while True:
-                adicionar = input("Deseja adicionar exercícios a este treino? (s/n): ").lower()
-                if adicionar == "s":
-                    print("\nEscolha um exercício da lista ou adicione um personalizado:")
-                    for i, ex in enumerate(EXERCICIOS_PREDEFINIDOS):
-                        print(f"{i + 1}. {ex['nome']} - {ex['series']} séries, {ex['repeticoes']} repetições, {ex['carga']} kg")
-                    print("11. Adicionar Exercício Personalizado")
-
-                    escolha = int(input("Escolha um número: "))
-                    if 1 <= escolha <= 10:
-                        exercicioEscolhido = EXERCICIOS_PREDEFINIDOS[escolha - 1]
-                        exercicio = Exercicio(
-                            nomeExercicio=exercicioEscolhido["nome"],
-                            series=exercicioEscolhido["series"],
-                            repeticoes=exercicioEscolhido["repeticoes"],
-                            carga=exercicioEscolhido["carga"],
-                        )
-                        treino.adicionarExercicio(exercicio)
-                        print(f"Exercício '{exercicio.nomeExercicio}' adicionado com sucesso!")
-                    elif escolha == 11:
-                        nomeExercicio = input("Nome do exercício: ")
-                        series = int(input("Número de séries: "))
-                        repeticoes = int(input("Número de repetições: "))
-                        carga = float(input("Carga utilizada (kg): "))
-                        exercicio = Exercicio(nomeExercicio, series, repeticoes, carga)
-                        treino.adicionarExercicio(exercicio)
-                        print(f"Exercício '{nomeExercicio}' adicionado com sucesso!")
-                    else:
-                        print("Opção inválida.")
-                elif adicionar == "n":
-                    break
-                else:
-                    print("Resposta inválida. Insira 's' ou 'n'.")
-
-            plano.criarPlano(treino)
-            print(f"Treino '{nomeTreino}' com dificuldade '{dificuldadeTexto}' criado com sucesso!")
-
-        elif opcao == "4" and plano.treinosProgramados:
-            print("Treinos disponíveis:")
-            for i, treino in enumerate(plano.treinosProgramados):
-                print(f"{i + 1}. {treino.nome} - {treino.nivelDificuldade}")
-
-            escolha = int(input("Escolha o treino para iniciar (número): "))
-            treinoAtual = plano.treinosProgramados.pop(escolha - 1)
-            treinoAtual.iniciarTreino()
-
-        elif opcao == "5" and treinoAtual:
-            while True:
-                dataTreino = input("Insira a data do treino (AAAA-MM-DD): ")
-                if validarData(dataTreino):
-                    treinoAtual.data = dataTreino
-                    break
-                else:
-                    print("Data inválida. Tente novamente.")
-
-            treinoAtual.finalizarTreino()
-            historico.registrarTreino(treinoAtual)
-            treinoAtual = None
-
-        elif opcao == "6":
-            historico.visualizarHistorico()
-
-        elif opcao == "7":
-            if not plano.treinosProgramados:
-                print("Não há treinos programados.")
-            else:
-                print("Planos de Treino:")
-                for i, treino in enumerate(plano.treinosProgramados):
-                    print(f"{i + 1}. {treino.nome} - {treino.nivelDificuldade}")
-                    if treino.listaExercicios:
-                        print("  Exercícios:")
-                        for exercicio in treino.listaExercicios:
-                            print(f"    - {exercicio.nomeExercicio}: {exercicio.series} séries, {exercicio.repeticoes} repetições, {exercicio.carga} kg")
-                    else:
-                        print("  Sem exercícios.")
-
-                print("\n1. Editar Treino")
-                print("2. Excluir Treino")
-                print("3. Voltar ao Menu Principal")
+                print("\nGerir Planos de Treino:")
+                print("1. Criar Novo Plano de Treino")
+                print("2. Selecionar Plano Existente")
+                print("3. Remover Plano de Treino")
+                print("4. Voltar ao Menu Principal")
                 escolha = input("Escolha uma opção: ")
 
                 if escolha == "1":
-                    numero = int(input("Escolha o treino para editar (número): "))
-                    treinoEditar = plano.treinosProgramados[numero - 1]
+                    nomePlano = input("Nome do novo plano: ")
+                    periodo = input("Período do plano: ")
+                    novo_plano = PlanoTreino(nomePlano=nomePlano, periodo=periodo)
+                    utilizador.adicionarPlanoTreino(novo_plano)
+                    print(f"Plano '{nomePlano}' criado e adicionado ao utilizador.")
 
-                    while True:
-                        print(f"\nEditar Treino '{treinoEditar.nome}':")
-                        print("1. Adicionar Exercício")
-                        print("2. Remover Exercício")
-                        print("3. Voltar ao Menu Principal")
+                elif escolha == "2":
+                    planos = utilizador.listarPlanosTreino()
+                    if not planos:
+                        print("Não há planos de treino disponíveis.")
+                        continue
 
-                        subEscolha = input("Escolha uma opção: ")
+                    print("Planos de Treino:")
+                    for idx, plano in enumerate(planos):
+                        print(f"{idx + 1}. {plano.nomePlano} - {plano.periodo}")
 
-                        if subEscolha == "1":
-                            print("\nAdicionar Exercício:")
-                            for i, ex in enumerate(EXERCICIOS_PREDEFINIDOS):
-                                print(f"{i + 1}. {ex['nome']} - {ex['series']} séries, {ex['repeticoes']} repetições, {ex['carga']} kg")
-                            print("11. Adicionar Exercício Personalizado")
+                    escolha_plano = int(input("Escolha o número do plano de treino: ")) - 1
+                    if 0 <= escolha_plano < len(planos):
+                        plano_selecionado = planos[escolha_plano]
+                        print(f"Plano '{plano_selecionado.nomePlano}' selecionado.")
 
-                            escolhaExercicio = int(input("Escolha um número: "))
-                            if 1 <= escolhaExercicio <= 10:
-                                exercicioEscolhido = EXERCICIOS_PREDEFINIDOS[escolhaExercicio - 1]
-                                exercicio = Exercicio(
-                                    nomeExercicio=exercicioEscolhido["nome"],
-                                    series=exercicioEscolhido["series"],
-                                    repeticoes=exercicioEscolhido["repeticoes"],
-                                    carga=exercicioEscolhido["carga"],
-                                )
-                                treinoEditar.adicionarExercicio(exercicio)
-                                print(f"Exercício '{exercicio.nomeExercicio}' adicionado ao treino.")
-                            elif escolhaExercicio == 11:
-                                nomeExercicio = input("Nome do exercício: ")
-                                series = int(input("Número de séries: "))
-                                repeticoes = int(input("Número de repetições: "))
-                                carga = float(input("Carga utilizada (kg): "))
-                                exercicio = Exercicio(nomeExercicio, series, repeticoes, carga)
-                                treinoEditar.adicionarExercicio(exercicio)
-                                print(f"Exercício '{nomeExercicio}' adicionado ao treino.")
-                            else:
-                                print("Opção inválida.")
-                        elif subEscolha == "2":
-                            if not treinoEditar.listaExercicios:
-                                print("Não há exercícios para remover.")
-                            else:
-                                for i, exercicio in enumerate(treinoEditar.listaExercicios):
-                                    print(f"{i + 1}. {exercicio.nomeExercicio}")
-                                removerIndice = int(input("Escolha o exercício para remover (número): ")) - 1
-                                if 0 <= removerIndice < len(treinoEditar.listaExercicios):
-                                    removido = treinoEditar.listaExercicios.pop(removerIndice)
-                                    print(f"Exercício '{removido.nomeExercicio}' removido com sucesso.")
+                        while True:
+                            print(f"\nGerir Plano '{plano_selecionado.nomePlano}':")
+                            print("1. Adicionar Treino")
+                            print("2. Iniciar Treino")
+                            print("3. Editar Treino")
+                            print("4. Excluir Treino")
+                            print("5. Voltar ao Menu Anterior")
+                            sub_escolha = input("Escolha uma opção: ")
+
+                            if sub_escolha == "1":
+                                #criar um novo treino
+                                nomeTreino = input("Nome do treino: ")
+                                print("\nEscolha a dificuldade:")
+                                print("1. Fácil")
+                                print("2. Intermédio")
+                                print("3. Difícil")
+
+                                nivelDificuldade = input("Insira a dificuldade (1, 2 ou 3): ")
+                                while nivelDificuldade not in ["1", "2", "3"]:
+                                    print("Opção inválida. Escolha 1, 2 ou 3.")
+                                    nivelDificuldade = input("Insira a dificuldade (1, 2 ou 3): ")
+
+                                dificuldadeTexto = {"1": "Fácil", "2": "Intermédio", "3": "Difícil"}[nivelDificuldade]
+
+                                treino = Treino(data=None, nivelDificuldade=dificuldadeTexto, nome=nomeTreino)
+
+                                #perguntar se deseja adicionar exercicios
+                                while True:
+                                    adicionar = input("Deseja adicionar exercícios a este treino? (s/n): ").lower()
+                                    if adicionar == "s":
+                                        print("\nEscolha um exercício da lista ou adicione um personalizado:")
+                                        for i, ex in enumerate(EXERCICIOS_PREDEFINIDOS):
+                                            print(f"{i + 1}. {ex['nome']} - {ex['series']} séries, {ex['repeticoes']} repetições, {ex['carga']} kg")
+                                        print("11. Adicionar Exercício Personalizado")
+
+                                        escolha_ex = int(input("Escolha um número: "))
+                                        if 1 <= escolha_ex <= 10:
+                                            ex_escolhido = EXERCICIOS_PREDEFINIDOS[escolha_ex - 1]
+                                            exercicio = Exercicio(
+                                                nomeExercicio=ex_escolhido["nome"],
+                                                series=ex_escolhido["series"],
+                                                repeticoes=ex_escolhido["repeticoes"],
+                                                carga=ex_escolhido["carga"],
+                                            )
+                                            treino.adicionarExercicio(exercicio)
+                                            print(f"Exercício '{exercicio.nomeExercicio}' adicionado com sucesso!")
+                                        elif escolha_ex == 11:
+                                            nomeExercicio = input("Nome do exercício: ")
+                                            series = int(input("Número de séries: "))
+                                            repeticoes = int(input("Número de repetições: "))
+                                            carga = float(input("Carga utilizada (kg): "))
+                                            exercicio = Exercicio(nomeExercicio, series, repeticoes, carga)
+                                            treino.adicionarExercicio(exercicio)
+                                            print(f"Exercício '{nomeExercicio}' adicionado com sucesso!")
+                                        else:
+                                            print("Opção inválida.")
+                                    elif adicionar == "n":
+                                        break
+                                    else:
+                                        print("Resposta inválida. Insira 's' ou 'n'.")
+
+                                plano_selecionado.criarPlano(treino)
+                                print(f"Treino '{nomeTreino}' adicionado ao plano '{plano_selecionado.nomePlano}'.")
+
+                            elif sub_escolha == "2":
+                                #iniciar um treino
+                                if not plano_selecionado.treinosProgramados:
+                                    print("Não há treinos programados neste plano.")
+                                    continue
+
+                                print("Treinos disponíveis:")
+                                for i, treino in enumerate(plano_selecionado.treinosProgramados):
+                                    print(f"{i + 1}. {treino.nome} - {treino.nivelDificuldade}")
+
+                                escolha_treino = int(input("Escolha o treino para iniciar (número): ")) - 1
+                                if 0 <= escolha_treino < len(plano_selecionado.treinosProgramados):
+                                    treinoAtual = plano_selecionado.treinosProgramados.pop(escolha_treino)
+                                    treinoAtual.iniciarTreino()
+
+                                    while True:
+                                        dataTreino = input("Insira a data do treino (AAAA-MM-DD): ")
+                                        if validarData(dataTreino):
+                                            treinoAtual.data = dataTreino
+                                            break
+                                        else:
+                                            print("Data inválida. Tente novamente.")
+
+                                    treinoAtual.finalizarTreino()
+                                    utilizador.historico.registrarTreino(treinoAtual)
+                                    treinoAtual = None
                                 else:
                                     print("Opção inválida.")
-                        elif subEscolha == "3":
-                            break
-                        else:
-                            print("Opção inválida.")
-                elif escolha == "2":
-                    numero = int(input("Escolha o treino para excluir (número): "))
-                    treinoExcluir = plano.treinosProgramados.pop(numero - 1)
-                    print(f"Treino '{treinoExcluir.nome}' excluído com sucesso!")
+
+                            elif sub_escolha == "3":
+                                #Editar treino
+                                if not plano_selecionado.treinosProgramados:
+                                    print("Não há treinos para editar neste plano.")
+                                    continue
+
+                                print("Treinos disponíveis:")
+                                for i, treino in enumerate(plano_selecionado.treinosProgramados):
+                                    print(f"{i + 1}. {treino.nome} - {treino.nivelDificuldade}")
+
+                                escolha_treino = int(input("Escolha o treino para editar (número): ")) - 1
+                                if 0 <= escolha_treino < len(plano_selecionado.treinosProgramados):
+                                    treinoEditar = plano_selecionado.treinosProgramados[escolha_treino]
+
+                                    while True:
+                                        print(f"\nEditar Treino '{treinoEditar.nome}':")
+                                        print("1. Adicionar Exercício")
+                                        print("2. Remover Exercício")
+                                        print("3. Editar Nome do Treino")
+                                        print("4. Voltar ao Menu Anterior")
+
+                                        subEscolha = input("Escolha uma opção: ")
+
+                                        if subEscolha == "1":
+                                            #adicionar exercicio
+                                            print("\nAdicionar Exercício:")
+                                            for i, ex in enumerate(EXERCICIOS_PREDEFINIDOS):
+                                                print(f"{i + 1}. {ex['nome']} - {ex['series']} séries, {ex['repeticoes']} repetições, {ex['carga']} kg")
+                                            print("11. Adicionar Exercício Personalizado")
+
+                                            escolha_ex = int(input("Escolha um número: "))
+                                            if 1 <= escolha_ex <= 10:
+                                                ex_escolhido = EXERCICIOS_PREDEFINIDOS[escolha_ex - 1]
+                                                exercicio = Exercicio(
+                                                    nomeExercicio=ex_escolhido["nome"],
+                                                    series=ex_escolhido["series"],
+                                                    repeticoes=ex_escolhido["repeticoes"],
+                                                    carga=ex_escolhido["carga"],
+                                                )
+                                                treinoEditar.adicionarExercicio(exercicio)
+                                                print(f"Exercício '{exercicio.nomeExercicio}' adicionado ao treino.")
+                                            elif escolha_ex == 11:
+                                                nomeExercicio = input("Nome do exercício: ")
+                                                series = int(input("Número de séries: "))
+                                                repeticoes = int(input("Número de repetições: "))
+                                                carga = float(input("Carga utilizada (kg): "))
+                                                exercicio = Exercicio(nomeExercicio, series, repeticoes, carga)
+                                                treinoEditar.adicionarExercicio(exercicio)
+                                                print(f"Exercício '{nomeExercicio}' adicionado ao treino.")
+                                            else:
+                                                print("Opção inválida.")
+
+                                        elif subEscolha == "2":
+                                            #remover exercicio
+                                            if not treinoEditar.listaExercicios:
+                                                print("Não há exercícios para remover.")
+                                            else:
+                                                for i, exercicio in enumerate(treinoEditar.listaExercicios):
+                                                    print(f"{i + 1}. {exercicio.nomeExercicio}")
+                                                removerIndice = int(input("Escolha o exercício para remover (número): ")) - 1
+                                                if 0 <= removerIndice < len(treinoEditar.listaExercicios):
+                                                    removido = treinoEditar.removerExercicio(removerIndice)
+                                                    print(f"Exercício '{removido.nomeExercicio}' removido com sucesso.")
+                                                else:
+                                                    print("Opção inválida.")
+
+                                        elif subEscolha == "3":
+                                            #editar nome do treino
+                                            novo_nome = input("Insira o novo nome do treino: ")
+                                            treinoEditar.editarNome(novo_nome)
+                                            print(f"Nome do treino atualizado para '{novo_nome}'.")
+                                        elif subEscolha == "4":
+                                            break
+                                        else:
+                                            print("Opção inválida.")
+                                else:
+                                    print("Opção inválida.")
+
+                            elif sub_escolha == "4":
+                                #excluir treino
+                                if not plano_selecionado.treinosProgramados:
+                                    print("Não há treinos para excluir neste plano.")
+                                    continue
+
+                                print("Treinos disponíveis:")
+                                for i, treino in enumerate(plano_selecionado.treinosProgramados):
+                                    print(f"{i + 1}. {treino.nome} - {treino.nivelDificuldade}")
+
+                                escolha_treino = int(input("Escolha o treino para excluir (número): ")) - 1
+                                if 0 <= escolha_treino < len(plano_selecionado.treinosProgramados):
+                                    treinoExcluir = plano_selecionado.excluirTreino(escolha_treino)
+                                else:
+                                    print("Opção inválida.")
+
+                            elif sub_escolha == "5":
+                                break
+                            else:
+                                print("Opção inválida.")
+                    else:
+                        print("Opção inválida.")
+
                 elif escolha == "3":
-                    continue
+                    #remover plano de treino
+                    planos = utilizador.listarPlanosTreino()
+                    if not planos:
+                        print("Não há planos para remover.")
+                        continue
+
+                    print("Planos de Treino:")
+                    for idx, plano in enumerate(planos):
+                        print(f"{idx + 1}. {plano.nomePlano} - {plano.periodo}")
+
+                    escolha_plano = int(input("Escolha o plano para remover: ")) - 1
+                    if 0 <= escolha_plano < len(planos):
+                        plano_removido = utilizador.removerPlanoTreino(escolha_plano)
+                        print(f"Plano '{plano_removido.nomePlano}' removido.")
+                    else:
+                        print("Opção inválida.")
+
+                elif escolha == "4":
+                    break
                 else:
                     print("Opção inválida.")
 
-        elif opcao == "8":
+        elif opcao == "4":
+            #visualizar historico de treinos
+            utilizador.historico.visualizarHistorico()
+
+        elif opcao == "5":
             print("Saindo... Obrigado por usar a Berserker Workout!")
             break
 

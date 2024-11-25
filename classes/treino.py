@@ -1,6 +1,8 @@
+# classe treino
+
 class Treino:
-    def __init__(self, data=None, nivelDificuldade="Fácil", nome="Treino Sem Nome"):
-        self.data = data  # Data atribuída apenas ao iniciar o treino
+    def __init__(self, data=None, nivelDificuldade="Intermédio", nome="Treino Padrão"):
+        self.data = data
         self.nivelDificuldade = nivelDificuldade
         self.nome = nome
         self.listaExercicios = []
@@ -8,34 +10,29 @@ class Treino:
         self.finalizado = False
 
     def adicionarExercicio(self, exercicio):
-        """Adiciona um exercício ao treino."""
+        """adiciona um exercício ao treino."""
         self.listaExercicios.append(exercicio)
 
     def removerExercicio(self, indice):
-        """Remove um exercício pelo índice."""
+        """remove um exercício do treino pelo índice."""
         if 0 <= indice < len(self.listaExercicios):
             return self.listaExercicios.pop(indice)
         else:
-            raise IndexError("Índice inválido para remoção de exercício.")
+            print("Índice inválido.")
 
     def editarNome(self, novoNome):
-        """Edita o nome do treino."""
+        """edita o nome do treino."""
         self.nome = novoNome
 
     def iniciarTreino(self):
-        """Inicia o treino."""
-        if not self.iniciado:
-            self.iniciado = True
-            print(f"Treino '{self.nome}' iniciado.")
-        else:
-            print(f"Treino '{self.nome}' já está em andamento.")
+        """marca o treino como iniciado."""
+        self.iniciado = True
+        print(f"Treino '{self.nome}' iniciado.")
 
     def finalizarTreino(self):
-        """Finaliza o treino."""
-        if self.iniciado and not self.finalizado:
+        """marca o treino como finalizado."""
+        if self.iniciado:
             self.finalizado = True
-            print(f"Treino '{self.nome}' finalizado. Total de exercícios: {len(self.listaExercicios)}")
-        elif not self.iniciado:
-            print(f"Treino '{self.nome}' ainda não foi iniciado.")
+            print(f"Treino '{self.nome}' finalizado.")
         else:
-            print(f"Treino '{self.nome}' já foi finalizado.")
+            print("O treino ainda não foi iniciado.")
