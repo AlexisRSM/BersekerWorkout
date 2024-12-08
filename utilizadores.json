@@ -1,26 +1,68 @@
 {
-    "Ralfe Mendes": {
-        "nome": "Alexis Ralfe da Silva Mendes",
-        "username": "Ralfe Mendes",
-        "password": "password",
-        "idade": 26,
-        "peso": 112.0,
-        "altura": 1.86,
-        "objetivo": "Perder Peso",
-        "historico": {
-            "treinosRealizados": []
-        }
-    },
     "Ralfe Neves": {
-        "nome": "Alexis Ralfe das Neves da Silva Mendes",
+        "nome": "Al\u00e9xis Ralfe das Neves da Silva Mendes",
         "username": "Ralfe Neves",
         "password": "passwordneves",
         "idade": 26,
         "peso": 110.6,
         "altura": 1.86,
-        "objetivo": "Perder",
+        "objetivo": "Perder Peso",
         "historico": {
             "treinosRealizados": []
-        }
+        },
+        "planosTreino": [
+            {
+                "nomePlano": "Segunda-feira",
+                "periodo": "1 dia",
+                "treinosProgramados": []
+            },
+            {
+                "nomePlano": "comer",
+                "periodo": "2 meses",
+                "treinosProgramados": []
+            },
+            {
+                "nomePlano": "Sexta",
+                "periodo": "1",
+                "treinosProgramados": [
+                    {
+                        "nome": "Costas",
+                        "nivelDificuldade": "F\u00e1cil",
+                        "listaExercicios": [
+                            {
+                                "nomeExercicio": "Agachamento",
+                                "series": 3,
+                                "repeticoes": 12,
+                                "carga": 20
+                            },
+                            {
+                                "nomeExercicio": "Agachamento",
+                                "series": 3,
+                                "repeticoes": 12,
+                                "carga": 20
+                            },
+                            {
+                                "nomeExercicio": "Supino",
+                                "series": 3,
+                                "repeticoes": 10,
+                                "carga": 30
+                            },
+                            {
+                                "nomeExercicio": "Remada Curvada",
+                                "series": 3,
+                                "repeticoes": 12,
+                                "carga": 25
+                            },
+                            {
+                                "nomeExercicio": "Pirocadas",
+                                "series": 200,
+                                "repeticoes": 33,
+                                "carga": 100.0
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
     }
 }

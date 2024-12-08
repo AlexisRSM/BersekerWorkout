@@ -1,10 +1,10 @@
 from classes.treino import Treino
 
 class PlanoTreino:
-    def __init__(self, nomePlano="Plano Padrão", periodo="Indefinido"):
+    def __init__(self, nomePlano="Plano Padrão", periodo="Indefinido", treinosProgramados=None):
         self.nomePlano = nomePlano
-        self.treinosProgramados = []
         self.periodo = periodo
+        self.treinosProgramados = treinosProgramados if treinosProgramados is not None else []
 
     def criarPlano(self, treino):
         self.treinosProgramados.append(treino)

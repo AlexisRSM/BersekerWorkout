@@ -1,9 +1,11 @@
+from classes.exercicio import Exercicio
+
 class Treino:
-    def __init__(self, data=None, nivelDificuldade="Intermédio", nome="Treino Padrão"):
+    def __init__(self, data=None, nivelDificuldade="Intermédio", nome="Treino Padrão", listaExercicios=None):
         self.data = data
         self.nivelDificuldade = nivelDificuldade
         self.nome = nome
-        self.listaExercicios = []
+        self.listaExercicios = listaExercicios if listaExercicios is not None else []
         self.iniciado = False
         self.finalizado = False
 
