@@ -1,38 +1,24 @@
-# classes/utilizador.py
+import uuid
+from classes.historico import Historico
 
 class Utilizador:
-    def __init__(self, nome, idade, peso, altura, objetivo):
+    def __init__(self, nome, idade, peso, altura, objetivo, username, password):
+        self.id = str(uuid.uuid4())  # ID único
         self.nome = nome
+        self.username = username  # Novo atributo para login
+        self.password = password  # Novo atributo para autenticação
         self.idade = idade
         self.peso = peso
         self.altura = altura
         self.objetivo = objetivo
-        self.planosTreino = []  # Novo atributo para armazenar planos de treino
-        self.historico = Historico()  # Associando o histórico ao utilizador
+        self.historico = Historico()  # Histórico associado ao utilizador
 
     def calcularIMC(self):
-        """calcula o Índice de massa corporal (IMC)."""
         return self.peso / (self.altura ** 2)
 
-    def atualizarPerfil(self, nome, idade, peso, altura, objetivo):
-        """atualiza os dados do perfil do utilizador."""
-        self.nome = nome
-        self.idade = idade
-        self.peso = peso
-        self.altura = altura
-        self.objetivo = objetivo
-
-    def adicionarPlanoTreino(self, planoTreino):
-        """adiciona um plano de treino ao utilizador."""
-        self.planosTreino.append(planoTreino)
-
-    def removerPlanoTreino(self, indice):
-        """remove um plano de treino do utilizador pelo índice."""
-        if 0 <= indice < len(self.planosTreino):
-            return self.planosTreino.pop(indice)
-        else:
-            print("Índice inválido.")
-
-    def listarPlanosTreino(self):
-        """retorna a lista de planos de treino do utilizador."""
-        return self.planosTreino
+    def atualizarPerfil(self, nome=None, idade=None, peso=None, altura=None, objetivo=None):
+        if nome: self.nome = nome
+        if idade: self.idade = idade
+        if peso: self.peso = peso
+        if altura: self.altura = altura
+        if objetivo: self.objetivo = objetivo

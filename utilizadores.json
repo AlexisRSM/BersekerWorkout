@@ -1,0 +1,26 @@
+{
+    "Ralfe Mendes": {
+        "nome": "Alexis Ralfe da Silva Mendes",
+        "username": "Ralfe Mendes",
+        "password": "password",
+        "idade": 26,
+        "peso": 112.0,
+        "altura": 1.86,
+        "objetivo": "Perder Peso",
+        "historico": {
+            "treinosRealizados": []
+        }
+    },
+    "Ralfe Neves": {
+        "nome": "Alexis Ralfe das Neves da Silva Mendes",
+        "username": "Ralfe Neves",
+        "password": "passwordneves",
+        "idade": 26,
+        "peso": 110.6,
+        "altura": 1.86,
+        "objetivo": "Perder",
+        "historico": {
+            "treinosRealizados": []
+        }
+    }
+}

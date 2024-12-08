@@ -1,27 +1,38 @@
-#classe historico
+from classes.treino import Treino
 
 class Historico:
     def __init__(self):
-        self.treinosRealizados = []
+        self.treinosRealizados = []  # Lista de treinos realizados
 
     def registrarTreino(self, treino):
-        """Regista um treino no histórico."""
-        if treino.finalizado:
-            self.treinosRealizados.append(treino)
-            print(f"Treino '{treino.nome}' registrado no histórico.")
-        else:
-            print(f"Erro: O treino '{treino.nome}' ainda não foi finalizado.")
+        self.treinosRealizados.append(treino)
 
     def visualizarHistorico(self):
-        """Exibe o histórico de treinos."""
         if not self.treinosRealizados:
-            print("Ainda não existem treinos registrados no histórico.")
-            return
-
+            print("Nenhum treino no histórico.")
         for treino in self.treinosRealizados:
-            print(f"Treino: {treino.nome}")
-            print(f"  Data: {treino.data}")
-            print(f"  Nível: {treino.nivelDificuldade}")
-            print(f"  Exercícios:")
-            for exercicio in treino.listaExercicios:
-                print(f"    - {exercicio.nomeExercicio}: {exercicio.series} séries, {exercicio.repeticoes} repetições, {exercicio.carga} kg")
+            print(f"Treino: {treino.nome}, Data: {treino.data}, Dificuldade: {treino.nivelDificuldade}")
+
+    def to_dict(self):
+        return {
+            "treinosRealizados": [
+                {
+                    "nome": treino.nome,
+                    "data": treino.data,
+                    "dificuldade": treino.nivelDificuldade
+                }
+                for treino in self.treinosRealizados
+            ]
+        }
+
+    @staticmethod
+    def from_dict(dados):
+        historico = Historico()
+        for treino_data in dados.get("treinosRealizados", []):
+            treino = Treino(
+                nome=treino_data["nome"],
+                data=treino_data["data"],
+                nivelDificuldade=treino_data["dificuldade"]
+            )
+            historico.registrarTreino(treino)
+        return historico
