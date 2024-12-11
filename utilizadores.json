@@ -28,6 +28,9 @@
                     {
                         "nome": "Costas",
                         "nivelDificuldade": "F\u00e1cil",
+                        "tipo": "generico",
+                        "caloriasQueimadas": 0,
+                        "data": null,
                         "listaExercicios": [
                             {
                                 "nomeExercicio": "Agachamento",
@@ -58,6 +61,114 @@
                                 "series": 200,
                                 "repeticoes": 33,
                                 "carga": 100.0
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "In\u00eas Mendes": {
+        "nome": "In\u00eas das Neves Pereira Mendes",
+        "username": "In\u00eas Mendes",
+        "password": "passwordneves",
+        "idade": 28,
+        "peso": 80.0,
+        "altura": 1.7,
+        "objetivo": "Perder Peso",
+        "historico": {
+            "treinosRealizados": []
+        },
+        "planosTreino": [
+            {
+                "nomePlano": "Pre-Wedding",
+                "periodo": "6",
+                "treinosProgramados": []
+            },
+            {
+                "nomePlano": "Wedding 2",
+                "periodo": "6",
+                "treinosProgramados": [
+                    {
+                        "nome": "Correr deitada",
+                        "nivelDificuldade": "Interm\u00e9dio",
+                        "tipo": "forca",
+                        "caloriasQueimadas": 0,
+                        "data": null,
+                        "listaExercicios": []
+                    }
+                ]
+            }
+        ]
+    },
+    "Bay": {
+        "nome": "Bay Mendes",
+        "username": "Bay",
+        "password": "passwordneves",
+        "idade": 5,
+        "peso": 60.0,
+        "altura": 70.0,
+        "objetivo": "Manter Peso e Tonificar",
+        "historico": {
+            "treinosRealizados": [
+                {
+                    "nome": "Ca\u00e7ar Moscas",
+                    "data": "2024-12-11",
+                    "dificuldade": "F\u00e1cil",
+                    "tipo": "superior",
+                    "caloriasQueimadas": 32.4,
+                    "listaExercicios": [
+                        {
+                            "nomeExercicio": "Desenvolvimento de Ombros",
+                            "series": 3,
+                            "repeticoes": 8,
+                            "carga": 20
+                        },
+                        {
+                            "nomeExercicio": "Supino Inclinado",
+                            "series": 3,
+                            "repeticoes": 10,
+                            "carga": 30
+                        },
+                        {
+                            "nomeExercicio": "Remada Sentada",
+                            "series": 3,
+                            "repeticoes": 12,
+                            "carga": 25
+                        }
+                    ]
+                }
+            ]
+        },
+        "planosTreino": [
+            {
+                "nomePlano": "Bayultimate",
+                "periodo": "2 meses",
+                "treinosProgramados": [
+                    {
+                        "nome": "Ca\u00e7ar Moscas",
+                        "nivelDificuldade": "F\u00e1cil",
+                        "tipo": "superior",
+                        "caloriasQueimadas": 32.4,
+                        "data": "2024-12-11",
+                        "listaExercicios": [
+                            {
+                                "nomeExercicio": "Desenvolvimento de Ombros",
+                                "series": 3,
+                                "repeticoes": 8,
+                                "carga": 20
+                            },
+                            {
+                                "nomeExercicio": "Supino Inclinado",
+                                "series": 3,
+                                "repeticoes": 10,
+                                "carga": 30
+                            },
+                            {
+                                "nomeExercicio": "Remada Sentada",
+                                "series": 3,
+                                "repeticoes": 12,
+                                "carga": 25
                             }
                         ]
                     }

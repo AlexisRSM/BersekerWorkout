@@ -1,8 +1,10 @@
+# utilizador.py - Classe Utilizador
 import uuid
 from classes.historico import Historico
 from classes.planoTreino import PlanoTreino
 
 class Utilizador:
+    """utilizador.py - Classe Utilizador"""
     def __init__(self, nome, idade, peso, altura, objetivo, username, password):
         self.id = str(uuid.uuid4())
         self.nome = nome
@@ -25,8 +27,6 @@ class Utilizador:
         if objetivo is not None: self.objetivo = objetivo
 
     def calcularCaloriasDiarias(self):
-        # Cálculo simplificado usando Mifflin-St Jeor (assumindo sexo masculino)
-        # BMR = 10*peso + 6.25*(altura*100) - 5*idade + 5
         altura_cm = self.altura * 100
         BMR = 10 * self.peso + 6.25 * altura_cm - 5 * self.idade + 5
 
@@ -37,7 +37,6 @@ class Utilizador:
         elif self.objetivo == "Ganhar Massa Muscular":
             calorias = BMR * 1.8
         else:
-            # Caso não tenha objetivo definido corretamente
             calorias = BMR * 1.4
 
         return calorias

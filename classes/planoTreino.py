@@ -1,6 +1,8 @@
+# planoTreino.py - Classe PlanoTreino
 from classes.treino import Treino
 
 class PlanoTreino:
+    """planoTreino.py - Classe PlanoTreino"""
     def __init__(self, nomePlano="Plano Padrão", periodo="Indefinido", treinosProgramados=None):
         self.nomePlano = nomePlano
         self.periodo = periodo

@@ -1,23 +1,13 @@
+# sistema.py - Classe Sistema
 import json
+import re
+from datetime import datetime
+
 from classes.utilizador import Utilizador
 from classes.planoTreino import PlanoTreino
 from classes.historico import Historico
-from classes.treino import Treino
+from classes.treino import Treino, TreinoForca, TreinoCardio, TreinoSuperior, TreinoInferior
 from classes.exercicio import Exercicio
-from datetime import datetime
-
-EXERCICIOS_PREDEFINIDOS = [
-    {"nome": "Agachamento", "series": 3, "repeticoes": 12, "carga": 20},
-    {"nome": "Supino", "series": 3, "repeticoes": 10, "carga": 30},
-    {"nome": "Remada Curvada", "series": 3, "repeticoes": 12, "carga": 25},
-    {"nome": "Leg Press", "series": 3, "repeticoes": 12, "carga": 50},
-    {"nome": "Flexão de Braços", "series": 3, "repeticoes": 15, "carga": 0},
-    {"nome": "Abdominal", "series": 3, "repeticoes": 20, "carga": 0},
-    {"nome": "Bíceps com Halteres", "series": 3, "repeticoes": 12, "carga": 15},
-    {"nome": "Tríceps no Banco", "series": 3, "repeticoes": 15, "carga": 10},
-    {"nome": "Panturrilha no Leg Press", "series": 3, "repeticoes": 15, "carga": 40},
-    {"nome": "Prancha", "series": 3, "repeticoes": 1, "carga": 0},
-]
 
 def validarData(data):
     """Valida se a data é válida e no formato AAAA-MM-DD."""
@@ -27,30 +17,64 @@ def validarData(data):
     except ValueError:
         return False
 
+def validar_username(username):
+    pattern = r'^[A-Za-z0-9_]+$'
+    return re.match(pattern, username) is not None
+
+# Exercícios pré-definidos por tipo de treino
+EXERCICIOS_FORCA = [
+    {"nome": "Levantamento Terra", "series": 4, "repeticoes": 6, "carga": 60},
+    {"nome": "Supino Plano", "series": 4, "repeticoes": 8, "carga": 40},
+    {"nome": "Agachamento Barra", "series": 4, "repeticoes": 6, "carga": 50}
+]
+
+EXERCICIOS_CARDIO = [
+    {"nome": "Correr na Passadeira", "series": 1, "repeticoes": 1, "carga": 0},
+    {"nome": "Elíptica", "series": 1, "repeticoes": 1, "carga": 0},
+    {"nome": "Bicicleta Estacionária", "series": 1, "repeticoes": 1, "carga": 0}
+]
+
+EXERCICIOS_SUPERIOR = [
+    {"nome": "Supino Inclinado", "series": 3, "repeticoes": 10, "carga": 30},
+    {"nome": "Remada Sentada", "series": 3, "repeticoes": 12, "carga": 25},
+    {"nome": "Desenvolvimento de Ombros", "series": 3, "repeticoes": 8, "carga": 20}
+]
+
+EXERCICIOS_INFERIOR = [
+    {"nome": "Leg Press", "series": 3, "repeticoes": 12, "carga": 50},
+    {"nome": "Extensora de Pernas", "series": 3, "repeticoes": 12, "carga": 30},
+    {"nome": "Flexora de Pernas", "series": 3, "repeticoes": 12, "carga": 25}
+]
+
 class Sistema:
+    """sistema.py - Classe Sistema"""
     def __init__(self):
-        self.utilizadores = {}  # Dicionário {username: objeto Utilizador}
+        self.utilizadores = {}
         self.utilizador_atual = None
         self.carregar_utilizadores()
 
     def criar_utilizador(self):
-        print("Dica: evite espaços ou caracteres especiais no nome de utilizador.")
-        username = input("Nome de utilizador: ")
-        if username in self.utilizadores:
-            print("Nome de utilizador já existe. Tente outro.")
-            return
+        print("Dica: O nome de utilizador deve conter apenas letras, números ou underscore, sem espaços ou acentos.")
+        while True:
+            username = input("Nome de utilizador: ")
+            if validar_username(username):
+                if username in self.utilizadores:
+                    print("Nome de utilizador já existe. Tente outro.")
+                else:
+                    break
+            else:
+                print("Username inválido. Utilize apenas letras, números ou underscore.")
 
         password = input("Defina uma senha: ")
         nome = input("Nome completo: ")
         try:
             idade = int(input("Idade: "))
-            peso = float(input("Peso (kg): ").replace(",", "."))
+            peso = float(input("Peso (kg): ").replace(",", "." ))
             altura = float(input("Altura (m): ").replace(",", "."))
         except ValueError:
             print("Valores inválidos inseridos. Tente novamente.")
             return
 
-        # Escolha do objetivo
         print("Escolha o seu objetivo:")
         print("1. Perder Peso")
         print("2. Manter Peso e Tonificar")
@@ -116,6 +140,15 @@ class Sistema:
                                 {
                                     "nome": treino.nome,
                                     "nivelDificuldade": treino.nivelDificuldade,
+                                    "tipo": (
+                                        "forca" if isinstance(treino, TreinoForca) else
+                                        "cardio" if isinstance(treino, TreinoCardio) else
+                                        "superior" if isinstance(treino, TreinoSuperior) else
+                                        "inferior" if isinstance(treino, TreinoInferior) else
+                                        "generico"
+                                    ),
+                                    "caloriasQueimadas": treino.caloriasQueimadas,
+                                    "data": treino.data,
                                     "listaExercicios": [
                                         {
                                             "nomeExercicio": ex.nomeExercicio,
@@ -145,29 +178,42 @@ class Sistema:
                 dados = json.load(f)
                 for username, info in dados.items():
                     historico = Historico.from_dict(info["historico"])
-                    planosTreino = [
-                        PlanoTreino(
-                            nomePlano=plano["nomePlano"],
-                            periodo=plano["periodo"],
-                            treinosProgramados=[
-                                Treino(
-                                    nome=treino["nome"],
-                                    nivelDificuldade=treino["nivelDificuldade"],
-                                    listaExercicios=[
-                                        Exercicio(
-                                            nomeExercicio=ex["nomeExercicio"],
-                                            series=ex["series"],
-                                            repeticoes=ex["repeticoes"],
-                                            carga=ex["carga"]
-                                        )
-                                        for ex in treino["listaExercicios"]
-                                    ]
+                    planosTreino = []
+                    for plano in info["planosTreino"]:
+                        treinos = []
+                        for treino_data in plano["treinosProgramados"]:
+                            tipo = treino_data.get("tipo", "generico")
+                            listaEx = [
+                                Exercicio(
+                                    nomeExercicio=ex["nomeExercicio"],
+                                    series=ex["series"],
+                                    repeticoes=ex["repeticoes"],
+                                    carga=ex["carga"]
                                 )
-                                for treino in plano["treinosProgramados"]
+                                for ex in treino_data["listaExercicios"]
                             ]
+                            if tipo == "forca":
+                                t = TreinoForca(nome=treino_data["nome"], nivelDificuldade=treino_data["nivelDificuldade"], listaExercicios=listaEx)
+                            elif tipo == "cardio":
+                                t = TreinoCardio(nome=treino_data["nome"], nivelDificuldade=treino_data["nivelDificuldade"], listaExercicios=listaEx)
+                            elif tipo == "superior":
+                                t = TreinoSuperior(nome=treino_data["nome"], nivelDificuldade=treino_data["nivelDificuldade"], listaExercicios=listaEx)
+                            elif tipo == "inferior":
+                                t = TreinoInferior(nome=treino_data["nome"], nivelDificuldade=treino_data["nivelDificuldade"], listaExercicios=listaEx)
+                            else:
+                                t = Treino(nome=treino_data["nome"], nivelDificuldade=treino_data["nivelDificuldade"], listaExercicios=listaEx)
+
+                            t.data = treino_data.get("data", None)
+                            t.caloriasQueimadas = treino_data.get("caloriasQueimadas", 0)
+                            treinos.append(t)
+
+                        planosTreino.append(
+                            PlanoTreino(
+                                nomePlano=plano["nomePlano"],
+                                periodo=plano["periodo"],
+                                treinosProgramados=treinos
+                            )
                         )
-                        for plano in info["planosTreino"]
-                    ]
 
                     utilizador = Utilizador(
                         nome=info["nome"],
@@ -193,17 +239,42 @@ class Sistema:
 
         while self.utilizador_atual:
             print(f"\n=== Menu de {self.utilizador_atual.nome} ===")
-            print("1. Calcular IMC")
+            print("1. Calcular IMC e Calorias Recom.")
             print("2. Gerir Planos")
             print("3. Visualizar Histórico")
             print("4. Editar Perfil")
-            print("5. Calcular Calorias Diárias")
+            print("5. Calcular Calorias Diárias (Objetivo Atual)")
             print("6. Logout")
 
             escolha = input("Escolha: ")
             if escolha == "1":
                 imc = self.utilizador_atual.calcularIMC()
                 print(f"IMC de {self.utilizador_atual.nome}: {imc:.2f}")
+                # Ajustar ingestão calórica
+                print("Deseja ajustar ingestão calórica?")
+                print("1. Perda Rápida (-300 kcal)")
+                print("2. Perda Lenta (-150 kcal)")
+                print("3. Manter (0 kcal)")
+                print("4. Ganhar Massa (+200 kcal)")
+                print("Enter para não calcular agora")
+                sub = input("Opção: ")
+                calorias_base = self.utilizador_atual.calcularCaloriasDiarias()
+                if sub == '1':
+                    calorias_base -= 300
+                elif sub == '2':
+                    calorias_base -= 150
+                elif sub == '3':
+                    calorias_base = calorias_base
+                elif sub == '4':
+                    calorias_base += 200
+                elif sub == '':
+                    pass
+                else:
+                    print("Opção inválida. Mantendo valor base.")
+
+                if sub in ['1','2','3','4']:
+                    print(f"Ingestão Calórica Recomendada: {calorias_base:.0f} kcal/dia")
+
             elif escolha == "2":
                 self.menu_planos()
             elif escolha == "3":
@@ -220,7 +291,6 @@ class Sistema:
                 print("Opção inválida. Tente novamente.")
 
     def editar_perfil(self):
-        """Permite editar idade, peso, altura e objetivo do utilizador atual."""
         if not self.utilizador_atual:
             return
         print("\n=== Editar Perfil ===")
@@ -279,6 +349,9 @@ class Sistema:
                 self.utilizador_atual.planosTreino.append(novo_plano)
                 self.salvar_utilizadores()
                 print(f"Plano '{nomePlano}' criado com sucesso.")
+                add_now = input("Deseja adicionar um treino agora? (s/n): ").lower()
+                if add_now == 's':
+                    self.menu_editar_plano(novo_plano)
 
             elif escolha == "2":
                 if not self.utilizador_atual.planosTreino:
@@ -289,12 +362,11 @@ class Sistema:
                         print(f"{idx + 1}. {plano.nomePlano} ({plano.periodo})")
 
             elif escolha == "3":
-                # Editar/Gerir um plano específico
                 if not self.utilizador_atual.planosTreino:
                     print("Nenhum plano disponível para editar.")
                     continue
 
-                print("\n=== Editar/ Gerir Planos ===")
+                print("\n=== Editar/Gerir Planos ===")
                 for idx, plano in enumerate(self.utilizador_atual.planosTreino):
                     print(f"{idx + 1}. {plano.nomePlano} ({plano.periodo})")
 
@@ -338,7 +410,6 @@ class Sistema:
                 print("Opção inválida. Tente novamente.")
 
     def menu_editar_plano(self, plano):
-        """Menu para editar um plano (mudar nome/periodo) e gerir os treinos dentro dele."""
         while True:
             print(f"\n=== Gerir Plano: {plano.nomePlano} ({plano.periodo}) ===")
             print("1. Editar Nome e Período do Plano")
@@ -357,7 +428,6 @@ class Sistema:
                 print("Plano atualizado com sucesso.")
 
             elif escolha == '2':
-                # Criar um novo treino
                 nomeTreino = input("Nome do treino: ")
                 print("\nEscolha a dificuldade:")
                 print("1. Fácil")
@@ -370,19 +440,44 @@ class Sistema:
                     print("Opção inválida. Escolha 1, 2 ou 3.")
                     nivel = input("Insira a dificuldade (1, 2 ou 3): ")
 
-                treino = Treino(nivelDificuldade=dificuldades[nivel], nome=nomeTreino)
+                print("\nEscolha o tipo de treino:")
+                print("1. Força")
+                print("2. Cardio")
+                print("3. Superior")
+                print("4. Inferior")
 
-                # Pergunta para adicionar exercícios (igual à versão antiga)
-                self.menu_gerir_exercicios_treino(treino)
+                tipo = input("Insira o tipo (1, 2, 3 ou 4): ")
+                while tipo not in ["1", "2", "3", "4"]:
+                    print("Opção inválida. Escolha 1, 2, 3 ou 4.")
+                    tipo = input("Insira o tipo (1, 2, 3 ou 4): ")
+
+                if tipo == "1":
+                    treino = TreinoForca(nivelDificuldade=dificuldades[nivel], nome=nomeTreino)
+                    exercicios_tipo = EXERCICIOS_FORCA
+                elif tipo == "2":
+                    treino = TreinoCardio(nivelDificuldade=dificuldades[nivel], nome=nomeTreino)
+                    exercicios_tipo = EXERCICIOS_CARDIO
+                elif tipo == "3":
+                    treino = TreinoSuperior(nivelDificuldade=dificuldades[nivel], nome=nomeTreino)
+                    exercicios_tipo = EXERCICIOS_SUPERIOR
+                else:
+                    treino = TreinoInferior(nivelDificuldade=dificuldades[nivel], nome=nomeTreino)
+                    exercicios_tipo = EXERCICIOS_INFERIOR
+
                 plano.criarPlano(treino)
                 self.salvar_utilizadores()
                 print(f"Treino '{nomeTreino}' adicionado ao plano '{plano.nomePlano}'.")
+
+                # Perguntar se quer adicionar exercícios agora
+                add_ex = input("Deseja adicionar exercícios a este treino agora? (s/n): ").lower()
+                if add_ex == 's':
+                    self.menu_gerir_exercicios_treino(treino, exercicios_tipo)
+                    self.salvar_utilizadores()
 
             elif escolha == '3':
                 if not plano.treinosProgramados:
                     print("Não há treinos neste plano.")
                     continue
-                # Gerir treinos existentes
                 for i, tr in enumerate(plano.treinosProgramados):
                     print(f"{i + 1}. {tr.nome} - {tr.nivelDificuldade}")
 
@@ -409,14 +504,24 @@ class Sistema:
             print("1. Adicionar Exercício")
             print("2. Remover Exercício")
             print("3. Editar Nome do Treino")
-            print("4. Finalizar Treino (definir data e registar histórico)")
+            print("4. Finalizar Treino (definir data, duração e registar histórico)")
             print("5. Voltar")
 
             escolha = input("Escolha: ")
 
             if escolha == '1':
-                # Adicionar exercício (pré-definido ou personalizado)
-                self.menu_gerir_exercicios_treino(treino)
+                # Determinar o tipo de exercicios default
+                if isinstance(treino, TreinoForca):
+                    exercicios_tipo = EXERCICIOS_FORCA
+                elif isinstance(treino, TreinoCardio):
+                    exercicios_tipo = EXERCICIOS_CARDIO
+                elif isinstance(treino, TreinoSuperior):
+                    exercicios_tipo = EXERCICIOS_SUPERIOR
+                elif isinstance(treino, TreinoInferior):
+                    exercicios_tipo = EXERCICIOS_INFERIOR
+                else:
+                    exercicios_tipo = []  # Caso genérico
+                self.menu_gerir_exercicios_treino(treino, exercicios_tipo)
                 self.salvar_utilizadores()
 
             elif escolha == '2':
@@ -455,22 +560,30 @@ class Sistema:
                     else:
                         print("Data inválida. Tente novamente.")
 
+                try:
+                    duracao_min = float(input("Insira a duração do treino em minutos: "))
+                except ValueError:
+                    duracao_min = 0
+
+                peso_user = self.utilizador_atual.peso
+                calorias = treino.calcularCaloriasQueimadas(peso_user, duracao_min)
+                treino.caloriasQueimadas = calorias
+
                 treino.finalizarTreino()
                 self.utilizador_atual.historico.registrarTreino(treino)
-                # Opcional: se quiser remover o treino do plano após realizado, pode-se fazer aqui
                 self.salvar_utilizadores()
-                print("Treino finalizado e registrado no histórico.")
+                print(f"Treino finalizado e registrado no histórico. Calorias Queimadas: {calorias:.2f} kcal")
+
             elif escolha == '5':
                 break
             else:
                 print("Opção inválida.")
 
-    def menu_gerir_exercicios_treino(self, treino):
-        """Menu para adicionar exercícios (pré-definidos ou personalizados) a um treino."""
+    def menu_gerir_exercicios_treino(self, treino, exercicios_tipo):
         while True:
             print("\n=== Adicionar Exercício ===")
-            print("Lista de Exercícios Pré-definidos:")
-            for i, ex in enumerate(EXERCICIOS_PREDEFINIDOS):
+            print("Lista de Exercícios Pré-definidos para este tipo de treino:")
+            for i, ex in enumerate(exercicios_tipo):
                 print(f"{i + 1}. {ex['nome']} - {ex['series']}x{ex['repeticoes']} @ {ex['carga']}kg")
             print("0. Adicionar Exercício Personalizado")
             print("Enter sem valor para voltar")
@@ -485,20 +598,19 @@ class Sistema:
                 continue
 
             if escolha_num == 0:
-                # Exercício personalizado
                 nomeEx = input("Nome do exercício: ")
                 try:
                     series = int(input("Número de séries: "))
                     repeticoes = int(input("Número de repetições: "))
                     carga = float(input("Carga utilizada (kg): "))
                 except ValueError:
-                    print("Valores inválidos para séries/rep/ carga.")
+                    print("Valores inválidos para séries/rep/carga.")
                     continue
                 ex_personalizado = Exercicio(nomeEx, series, repeticoes, carga)
                 treino.adicionarExercicio(ex_personalizado)
                 print(f"Exercício '{nomeEx}' adicionado com sucesso!")
-            elif 1 <= escolha_num <= len(EXERCICIOS_PREDEFINIDOS):
-                ex_escolhido = EXERCICIOS_PREDEFINIDOS[escolha_num - 1]
+            elif 1 <= escolha_num <= len(exercicios_tipo):
+                ex_escolhido = exercicios_tipo[escolha_num - 1]
                 exerc = Exercicio(
                     nomeExercicio=ex_escolhido["nome"],
                     series=ex_escolhido["series"],
