@@ -1,4 +1,4 @@
-# main.py - Ponto de entrada da aplicação
+# main.py - ponto de entrada da aplicação
 from classes.sistema import Sistema
 
 ASCII_ART = r"""
@@ -17,12 +17,12 @@ if __name__ == "__main__":
 
     while True:
         print("\n=== Menu Principal ===")
-        print("1. Criar Novo Utilizador")
-        print("2. Login")
-        print("3. Visualizar Utilizadores Existentes")
-        print("4. Sair")
+        print("1. criar novo utilizador")
+        print("2. login")
+        print("3. visualizar utilizadores existentes")
+        print("4. sair")
 
-        opcao = input("Escolha uma opção: ")
+        opcao = input("escolha uma opção: ")
 
         if opcao == "1":
             sistema.criar_utilizador()
@@ -33,8 +33,8 @@ if __name__ == "__main__":
         elif opcao == "3":
             sistema.visualizar_utilizadores()
         elif opcao == "4":
-            print("Saindo... Obrigado por usar a Berserker Workout!")
+            print("saindo... obrigado por usar a berserker workout!")
             sistema.salvar_utilizadores()
             break
         else:
-            print("Opção inválida. Tente novamente.")
+            print("opção inválida. tente novamente.")

@@ -1,28 +1,30 @@
-# historico.py - Classe Historico
+# classe historico
 from classes.treino import Treino, TreinoForca, TreinoCardio, TreinoSuperior, TreinoInferior
 from classes.exercicio import Exercicio
 
 class Historico:
-    """historico.py - Classe Historico"""
     def __init__(self):
         self.treinosRealizados = []
 
     def registrarTreino(self, treino):
+        """regista um treino no histórico."""
         self.treinosRealizados.append(treino)
 
     def visualizarHistorico(self):
+        """exibe o histórico de treinos."""
         if not self.treinosRealizados:
-            print("Nenhum treino no histórico.")
+            print("nenhum treino no histórico.")
             return
 
         for treino in self.treinosRealizados:
-            print(f"Treino: {treino.nome}, Data: {treino.data}, Dificuldade: {treino.nivelDificuldade}")
+            print(f"treino: {treino.nome}, data: {treino.data}, dificuldade: {treino.nivelDificuldade}")
             if treino.caloriasQueimadas > 0:
-                print(f"  Calorias Queimadas: {treino.caloriasQueimadas:.2f} kcal")
+                print(f"  calorias queimadas: {treino.caloriasQueimadas:.2f} kcal")
             for ex in treino.listaExercicios:
                 print(f"   - {ex.nomeExercicio}: {ex.series}x{ex.repeticoes} @ {ex.carga}kg")
 
     def to_dict(self):
+        """retorna um dicionário com o histórico."""
         return {
             "treinosRealizados": [
                 {
@@ -53,6 +55,7 @@ class Historico:
 
     @staticmethod
     def from_dict(dados):
+        """cria um histórico a partir de um dicionário."""
         historico = Historico()
         for treino_data in dados.get("treinosRealizados", []):
             tipo = treino_data.get("tipo", "generico")

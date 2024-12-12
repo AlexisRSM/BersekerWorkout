@@ -1,10 +1,9 @@
-# utilizador.py - Classe Utilizador
+# classe utilizador
 import uuid
 from classes.historico import Historico
 from classes.planoTreino import PlanoTreino
 
 class Utilizador:
-    """utilizador.py - Classe Utilizador"""
     def __init__(self, nome, idade, peso, altura, objetivo, username, password):
         self.id = str(uuid.uuid4())
         self.nome = nome
@@ -18,15 +17,18 @@ class Utilizador:
         self.planosTreino = []
 
     def calcularIMC(self):
+        """calcula o imc do utilizador."""
         return self.peso / (self.altura ** 2)
 
     def atualizarPerfil(self, idade=None, peso=None, altura=None, objetivo=None):
+        """atualiza os dados do perfil do utilizador."""
         if idade is not None: self.idade = idade
         if peso is not None: self.peso = peso
         if altura is not None: self.altura = altura
         if objetivo is not None: self.objetivo = objetivo
 
     def calcularCaloriasDiarias(self):
+        """calcula as calorias diárias recomendadas com base no objetivo."""
         altura_cm = self.altura * 100
         BMR = 10 * self.peso + 6.25 * altura_cm - 5 * self.idade + 5
 

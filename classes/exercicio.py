@@ -1,6 +1,5 @@
-# exercicio.py - Classe Exercicio
+# classe exercicio
 class Exercicio:
-    """exercicio.py - Classe Exercicio"""
     def __init__(self, nomeExercicio, series, repeticoes, carga):
         self.nomeExercicio = nomeExercicio
         self.series = series
