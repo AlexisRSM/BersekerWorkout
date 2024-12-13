@@ -1,6 +1,6 @@
 Berserker Workout
 Bem-vindo ao Berserker Workout!
-Esta aplicação em modo de texto ajuda-o(a) a gerir treinos, planos, exercícios, acompanhar o seu progresso e ajustar as suas metas de fitness de forma simples e personalizada.
+Esta aplicação em modo de linha de comandos (CLI) ajuda-o(a) a gerir treinos, planos, exercícios, acompanhar o seu progresso e ajustar as suas metas de fitness de forma simples e personalizada.
 
 O que há de novo nesta fase?
 
@@ -9,10 +9,14 @@ Persistência de dados em ficheiro JSON, garantindo que as suas informações pe
 Cálculo de IMC e recomendação calórica, com possibilidade de ajustes (perda rápida, lenta, manter, ganhar massa)
 Arte ASCII no arranque, oferecendo uma experiência mais envolvente
 Melhor organização interna do código, preparando o projeto para evoluções futuras (por exemplo, uma interface gráfica)
+
 Requisitos:
+
 Ter o Python 3.x instalado no seu sistema
 Não são necessárias outras bibliotecas além das fornecidas pela instalação padrão do Python
+
 Como Executar:
+
 Extraia todos os ficheiros do projeto para uma pasta local.
 Certifique-se de que a estrutura está intacta (a pasta "classes/" contém os ficheiros de classe).
 
@@ -20,14 +24,12 @@ Abra um terminal/linha de comandos nessa pasta.
 
 Execute:
 
-bash
-Copy code
 python main.py
+
 Ou, se necessário:
 
-bash
-Copy code
 python3 main.py
+
 Ao iniciar, verá uma arte ASCII e será recebido com o "Menu Principal".
 
 Primeiros Passos:
@@ -78,12 +80,14 @@ Ao criar o utilizador, use um nome de utilizador simples e fácil de lembrar.
 Atualize o seu perfil quando necessário, caso o seu peso ou objetivo mude.
 Crie planos de treino realistas e adicione exercícios personalizados, tornando o seu plano mais adaptado às suas necessidades.
 Finalize os treinos após realizá-los e verifique o histórico para acompanhar o seu progresso ao longo do tempo.
+
 Preparação para o Futuro:
 Esta fase 2 prepara o terreno para funcionalidades futuras, como:
 
 Integração com uma interface gráfica mais completa
 Recomendação de exercícios mais inteligentes com base no seu histórico
 Evolução da persistência de dados para uma base de dados mais robusta
+
 Em caso de Dúvidas:
 Se tiver alguma dificuldade, releia este README, siga as instruções passo a passo e explore os menus com calma. O objetivo é tornar a experiência intuitiva e eficiente, ajudando-o(a) a acompanhar o seu progresso de fitness.
 
