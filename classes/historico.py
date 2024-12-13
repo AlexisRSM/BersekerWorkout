@@ -7,11 +7,11 @@ class Historico:
         self.treinosRealizados = []
 
     def registrarTreino(self, treino):
-        """regista um treino no histórico."""
+        """regista um treino no historico."""
         self.treinosRealizados.append(treino)
 
     def visualizarHistorico(self):
-        """exibe o histórico de treinos."""
+        """exibe o historico de treinos."""
         if not self.treinosRealizados:
             print("nenhum treino no histórico.")
             return
@@ -24,7 +24,7 @@ class Historico:
                 print(f"   - {ex.nomeExercicio}: {ex.series}x{ex.repeticoes} @ {ex.carga}kg")
 
     def to_dict(self):
-        """retorna um dicionário com o histórico."""
+        """retorna um dicionsrio com o historico."""
         return {
             "treinosRealizados": [
                 {
@@ -55,7 +55,7 @@ class Historico:
 
     @staticmethod
     def from_dict(dados):
-        """cria um histórico a partir de um dicionário."""
+        """cria um historico a partir de um dicionario."""
         historico = Historico()
         for treino_data in dados.get("treinosRealizados", []):
             tipo = treino_data.get("tipo", "generico")

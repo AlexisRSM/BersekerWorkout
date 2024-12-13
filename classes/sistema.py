@@ -10,7 +10,7 @@ from classes.treino import Treino, TreinoForca, TreinoCardio, TreinoSuperior, Tr
 from classes.exercicio import Exercicio
 
 def validarData(data):
-    """valida se a data é válida e no formato aaaa-mm-dd."""
+    """valida se a data é valida e no formato aaaa-mm-dd."""
     try:
         datetime.strptime(data, "%Y-%m-%d")
         return True
@@ -587,7 +587,7 @@ class Sistema:
                 print("opção inválida.")
 
     def menu_gerir_exercicios_treino(self, treino, exercicios_tipo):
-        """menu para adicionar exercícios (pré-definidos ou personalizados)."""
+        """menu para adicionar exercicios (pre-definidos ou personalizados)."""
         while True:
             print("\n=== adicionar exercício ===")
             print("lista de exercícios pré-definidos para este tipo de treino:")

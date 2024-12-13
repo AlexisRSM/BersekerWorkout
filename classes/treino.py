@@ -49,7 +49,7 @@ class Treino:
 # classe treinoForca
 class TreinoForca(Treino):
     def calcularCaloriasQueimadas(self, peso, duracao_min):
-        """calcula as calorias para um treino de força."""
+        """calcula as calrias para um treino de força."""
         if not self.listaExercicios or duracao_min <= 0:
             return 0
         soma_total = sum(ex.carga * ex.series * ex.repeticoes for ex in self.listaExercicios)
@@ -81,7 +81,7 @@ class TreinoSuperior(Treino):
 # classe treinoInferior
 class TreinoInferior(Treino):
     def gruposTrabalhados(self):
-        """retorna os grupos musculares trabalhados no treino inferior."""
+        """retorna os grupos musculares trabalhados no trino inferior."""
         return ["Pernas", "Glúteos", "Panturrilhas"]
 
     def calcularCaloriasQueimadas(self, peso, duracao_min):
